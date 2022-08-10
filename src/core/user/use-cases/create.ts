@@ -18,4 +18,4 @@ const execute = ({ Repositories }: IDependencies) => async ({ name }: CreateUser
   return Repositories.user.create(data)
 }
 
-export const create = (opts: IDependencies) => (props: CreateUserInput) => pipe(CreateUser.parse, execute(opts))(props)
+export const create = (dependencies: IDependencies) => (props: CreateUserInput) => pipe(CreateUser.parse, execute(dependencies))(props)
