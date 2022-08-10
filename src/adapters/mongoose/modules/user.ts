@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose'
 
-import { ValidationError } from '@/support/errors'
+import { NotFoundError } from '@/support/errors'
 import { IRepositoriesOpts } from '@/ports/database'
 import { IUserRepository, CreateUserDatabaseInput } from '@/ports/database/modules/user'
 import { User, UserEntity } from '@/core/user/entities'
@@ -27,7 +27,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
     const model = await Model.findById(id)
 
     if (!model) {
-      throw new ValidationError('userNotFound')
+      throw new NotFoundError('userNotFound')
     }
 
     return User({

@@ -2,9 +2,9 @@ import { HTTPMethods } from 'fastify'
 
 import { IDependencies } from '@/core/shared/types'
 import { CreateUserInput } from '@/core/user/use-cases/create'
+import { server } from '@/adapters/fastify/server'
 import { UserHttp } from '@/ports/http'
 import { withError } from '@/ports/http/support'
-import { server } from '@/adapters/fastify/server'
 
 export const UserRoutes = (dependencies: IDependencies) => {
   const routes = UserHttp(dependencies)
