@@ -2,9 +2,9 @@ import express from 'express'
 
 import { env } from '@/config'
 import { IDependencies } from '@/core/shared/types'
-import { IServer } from '@/ports/http'
-import { UserRoutes } from '@/adapters/express/modules'
 import { server } from '@/adapters/express/server'
+import { UserRoutes } from '@/adapters/express/modules'
+import { IServer } from '@/ports/http'
 
 const PORT = env('SERVER_PORT')
 
