@@ -24,7 +24,7 @@ const set = async <T>(key: string, value: T) => {
 }
 
 const exists = async (key: string): Promise<Boolean> => {
-  return !!cache[key]
+  return !!get(key)
 }
 
 const del = async (key: string) => {
