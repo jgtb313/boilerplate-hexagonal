@@ -1,9 +1,6 @@
-import { env } from '@/config'
 import { IServer } from '@/ports/http'
 import { server } from '@/adapters/express/server'
 import '@/adapters/express/modules'
-
-const PORT = env('PORT')
 
 server.get('/', (_, reply) => {
   reply.send({ message: 'User Service' })
@@ -13,7 +10,7 @@ server.get('/health', (_, reply) => {
   reply.send({ message: 'Health' })
 })
 
-const start = async () => {
+const start = async (PORT: string) => {
   try {
     server.listen(+PORT, () => console.log(`Express Server running on PORT: ${PORT}`))
   } catch (error) {

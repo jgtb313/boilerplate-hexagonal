@@ -5,5 +5,3 @@ export type ICache = {
   exists(key: string): Promise<Boolean>
   delete(key: string): Promise<void>
 }
-
-export * from '@/adapters/redis'

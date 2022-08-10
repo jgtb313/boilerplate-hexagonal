@@ -1,7 +1,7 @@
 import { IRepositories } from '@/ports/database'
 import { ICache } from '@/ports/cache'
 
-export type UseCase = {
+export type IDependencies = {
   Repositories: IRepositories
   Cache: ICache
 }

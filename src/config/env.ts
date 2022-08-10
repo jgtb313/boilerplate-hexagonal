@@ -1,8 +1,9 @@
 type Envs =
-  | 'PORT'
   | 'STAGE'
-  | 'DATABASE_URL'
-  | 'REDIS_HOST'
+  | 'SERVER_PORT'
+  | 'POSTGRES_URL'
+  | 'MONGO_URL'
+  | 'REDIS_URL'
 
 export const env = (value: Envs) => {
   const prop = process.env[value]

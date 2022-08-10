@@ -1,24 +1,16 @@
-import { createClient } from 'redis'
-
-import { env } from '@/config'
 import { ICache } from '@/ports/cache'
 
-const REDIS_URL = env('REDIS_URL')
-
-const client = createClient({
-  url: REDIS_URL,
-})
+type CacheData = {
+  [k: string]: string
+}
+const cache: CacheData = {}
 
 const connect = async () => {
-  return client
-    .connect()
-    .then(
-      () => console.log(`Connected on Redis ${REDIS_URL}`),
-    )
+  console.log('Connected on Cache In Memory')
 }
 
 const get = async <T>(key: string): Promise<T | undefined> => {
-  const value = await client.get(key)
+  const value = cache[key]
 
   if (!value) {
     return
@@ -28,16 +20,15 @@ const get = async <T>(key: string): Promise<T | undefined> => {
 }
 
 const set = async <T>(key: string, value: T) => {
-  await client.set(key, JSON.stringify(value))
+  cache[key] = JSON.stringify(value)
 }
 
 const exists = async (key: string): Promise<Boolean> => {
-  const value = await client.exists(key)
-  return !!value
+  return !!cache[key]
 }
 
 const del = async (key: string) => {
-  await client.del(key)
+  delete cache[key]
 }
 
 export const Cache: ICache = {

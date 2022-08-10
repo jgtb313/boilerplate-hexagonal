@@ -13,5 +13,3 @@ export type IDatabase = {
   Repositories(opts: IRepositoriesOpts): IRepositories,
   connect(): Promise<void>
 }
-
-export * from '@/adapters/prisma'

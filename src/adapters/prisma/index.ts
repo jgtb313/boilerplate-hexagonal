@@ -2,10 +2,10 @@ import { env } from '@/config'
 import { IDatabase } from '@/ports/database'
 import { Repositories } from './modules'
 
-const DATABASE_URL = env('DATABASE_URL')
+const POSTGRES_URL = env('POSTGRES_URL')
 
 export const connect = async () => {
-  console.log(`Connected on Prisma ${DATABASE_URL}`)
+  console.log(`Connected on Prisma ${POSTGRES_URL}`)
 }
 
 export const Database: IDatabase = {
