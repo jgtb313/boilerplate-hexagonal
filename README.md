@@ -1,1 +1,1 @@
-# MS Boilerplate
+# Boilerplate Hexagonal
