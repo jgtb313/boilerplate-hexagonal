@@ -1,11 +1,10 @@
 import { User as UserPrisma, UserStatus } from '@prisma/client'
 
 import { NotFoundError } from '@/support/errors'
+import { User, UserEntity } from '@/core/user/entities'
+import { prisma } from '@/adapters/prisma/client'
 import { IRepositoriesOpts } from '@/ports/database'
 import { IUserRepository, CreateUserDatabaseInput } from '@/ports/database/modules/user'
-import { User, UserEntity } from '@/core/user/entities'
-
-import { prisma } from '@/adapters/prisma/client'
 
 export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
   findById: async (id: string): Promise<UserEntity> => {
