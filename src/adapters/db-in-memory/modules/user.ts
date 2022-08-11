@@ -8,7 +8,7 @@ import { User, UserEntity } from '@/core/user/entities'
 const Users: UserEntity[] = []
 
 export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
-  findById: async (id: string): Promise<UserEntity> => {
+  async findById (id: string): Promise<UserEntity> {
     const cache = await Cache.get(id)
 
     if (cache) {
@@ -24,7 +24,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
     return User(model).state
   },
 
-  create: async (data: CreateUserDatabaseInput): Promise<UserEntity> => {
+  async create (data: CreateUserDatabaseInput): Promise<UserEntity> {
     const model = {
       ...data,
       id: uuid(),

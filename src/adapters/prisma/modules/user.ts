@@ -7,7 +7,7 @@ import { IRepositoriesOpts } from '@/ports/database'
 import { IUserRepository, CreateUserDatabaseInput } from '@/ports/database/modules/user'
 
 export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
-  findById: async (id: string): Promise<UserEntity> => {
+  async findById (id: string): Promise<UserEntity> {
     const cache = await Cache.get(id)
 
     if (cache) {
@@ -27,7 +27,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
     return User(model).state
   },
 
-  create: async (data: CreateUserDatabaseInput): Promise<UserEntity> => {
+  async create (data: CreateUserDatabaseInput): Promise<UserEntity> {
     const model = await prisma.user.create({
       data: castToUserPrisma(data),
     })

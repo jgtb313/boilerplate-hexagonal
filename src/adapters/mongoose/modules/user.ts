@@ -17,7 +17,7 @@ const Schema = new mongoose.Schema(schema, { timestamps: true })
 const Model = mongoose.model('users', Schema, 'users')
 
 export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
-  findById: async (id: string): Promise<UserEntity> => {
+  async findById (id: string): Promise<UserEntity> {
     const cache = await Cache.get(id)
 
     if (cache) {
@@ -36,7 +36,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
     }).state
   },
 
-  create: async (data: CreateUserDatabaseInput): Promise<UserEntity> => {
+  async create (data: CreateUserDatabaseInput): Promise<UserEntity> {
     const model = await Model.create(data)
 
     await Cache.set(model.id, model)
