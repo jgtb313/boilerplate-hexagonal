@@ -12,6 +12,8 @@ const PORT = env('SERVER_PORT')
 server.use(express.urlencoded({ extended: true }))
 server.use(express.json({ limit: '256kb' }))
 
+server.use('/docs', express.static('docs'))
+
 server.get('/', (_, reply) => {
   reply.send({ message: 'Boilerplate' })
 })

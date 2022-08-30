@@ -13,6 +13,6 @@ export const Pagination = z
       limit: pagination.limit > 100 ? 100 : +pagination.limit,
     }
   })
-  .refine(pagination => isInteger(pagination.page), { path: ['page'], message: 'receivedStringExpectedNumber' })
-  .refine(pagination => isInteger(pagination.limit), { path: ['limit'], message: 'receivedStringExpectedNumber' })
+  .refine(pagination => isInteger(pagination.page), { path: ['page'], message: 'invalidInteger' })
+  .refine(pagination => isInteger(pagination.limit), { path: ['limit'], message: 'invalidInteger' })
 export type PaginationInput = z.infer<typeof Pagination>
