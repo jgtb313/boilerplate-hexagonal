@@ -66,13 +66,14 @@ export const withError = (error: Error) => {
       const customMessages: CustomMessage = {
         'String must contain at least 1 character(s)': 'required',
       }
-      return customMessages[issue.message] || issue.message
+      return camelCase(customMessages[issue.message] || issue.message)
     }
 
     return {
       error: {
+        message: 'validationFailed',
         errors: error.issues.map(issue => ({
-          [getIssuePath(issue) as string]: camelCase(getIssueMessage(issue)),
+          [getIssuePath(issue) as string]: getIssueMessage(issue),
         })),
       },
     }
