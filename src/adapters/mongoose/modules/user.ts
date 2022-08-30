@@ -10,6 +10,10 @@ import { PaginateOutput } from '@/ports/database/support'
 const collection = 'users'
 
 const UserSchema = {
+  _id: {
+    type: String,
+    unique: true,
+  },
   name: {
     type: String,
     required: true,
@@ -93,7 +97,10 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
   },
 
   async create (data: UserEntity): Promise<UserEntity> {
-    const model = await new Model(data).save()
+    const model = await new Model({
+      ...data,
+      _id: data.id,
+    }).save()
 
     const user = User(castToUserEntity(model)).state
 
