@@ -44,7 +44,6 @@ export const UserHttp = (dependencies: IDependencies): IUserRouter => ({
     path: '/users/email-exists',
     method: 'GET',
     execute: async ({ query }: IRouteInput<EmailExistsInput, {}, {}, {}>) => {
-      console.log(query)
       const exists = await emailExists(dependencies)(query)
       return withResponse({ exists })
     },
