@@ -12,11 +12,5 @@ export const withID = <T>(value: T) => ({
 })
 
 export const replaceSpecialChars = (value: string) => {
-  value = value.replace(/[ÀÁÂÃÄÅ]/, 'A')
-  value = value.replace(/[àáâãäå]/, 'a')
-  value = value.replace(/[ÈÉÊË]/, 'E')
-  value = value.replace(/[Ç]/, 'C')
-  value = value.replace(/[ç]/, 'c')
-
-  return value.replace(/[^a-z0-9]/gi, '')
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
