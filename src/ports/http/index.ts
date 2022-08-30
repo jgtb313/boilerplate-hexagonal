@@ -4,7 +4,7 @@ import { HTTPMethods } from './support'
 
 export * from './modules'
 
-export type IRouteInput<T, E, K, P> = {
+export type IRouteInput<T, E, K, P = any> = {
   query: T
   params: E
   body: K

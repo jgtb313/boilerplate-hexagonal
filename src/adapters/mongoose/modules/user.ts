@@ -10,9 +10,10 @@ import { PaginateOutput } from '@/ports/database/support'
 const collection = 'users'
 
 const UserSchema = {
-  _id: {
+  id: {
     type: String,
     unique: true,
+    index: true,
   },
   name: {
     type: String,
@@ -53,7 +54,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
 
     const data = await Model.find(where)
 
-    return data.map(model => User(castToUserEntity(model)).state)
+    return data.map(model => User(model.toObject()).state)
   },
 
   async paginate ({ page, limit, ...params }: PaginateInput): Promise<PaginateOutput<UserEntity>> {
@@ -65,7 +66,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
 
     const { docs: data, totalDocs } = await Model.paginate(where, { page, limit })
 
-    const docs = data.map(model => User(castToUserEntity(model)).state)
+    const docs = data.map(model => User(model.toObject()).state)
 
     return {
       docs,
@@ -82,13 +83,13 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
       return cache
     }
 
-    const model = await Model.findById(id)
+    const model = await Model.findOne({ id })
 
     if (!model) {
       throw new NotFoundError('userNotFound')
     }
 
-    return User(castToUserEntity(model)).state
+    return User(model.toObject()).state
   },
 
   async emailExists (email: string): Promise<boolean> {
@@ -97,12 +98,9 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
   },
 
   async create (data: UserEntity): Promise<UserEntity> {
-    const model = await new Model({
-      ...data,
-      _id: data.id,
-    }).save()
+    const model = await new Model(data).save()
 
-    const user = User(castToUserEntity(model)).state
+    const user = User(model.toObject()).state
 
     await Cache.set(model.id, user)
 
@@ -110,25 +108,18 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
   },
 
   async updateById (id: string, data: Partial<UserEntity>): Promise<UserEntity> {
-    const model = await Model.findByIdAndUpdate(id, data)
+    const model = await Model.findOneAndUpdate({ id }, data, { new: true })
 
     if (!model) {
       throw new NotFoundError('userNotFound')
     }
 
-    return User(castToUserEntity(model)).state
+    return User(model.toObject()).state
   },
 
   async deleteById (id: string): Promise<void> {
     const model = await this.findById(id)
 
-    await Model.findByIdAndDelete(model.id)
+    await Model.findOneAndDelete({ id: model.id })
   },
 })
-
-const castToUserEntity = (model: UserDocument): UserEntity => {
-  return {
-    ...model.toObject(),
-    id: model._id.toString(),
-  }
-}

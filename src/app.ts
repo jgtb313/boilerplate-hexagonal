@@ -1,12 +1,8 @@
-import {
-  Dependencies,
-  Database,
-  Server,
-} from '@/support/dependencies'
+import { bootstrap as Bootstrap, Dependencies } from '@/bootstrap'
+import { Server } from '@/adapters/fastify'
 
 const bootstrap = async () => {
-  await Dependencies.Cache.connect()
-  await Database.connect()
+  await Bootstrap()
   await Server.start(Dependencies)
 }
 

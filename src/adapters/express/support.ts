@@ -15,6 +15,7 @@ export const setupRoutes = (router: Router) => (routes: IModuleRoute) => {
             query: req.query ?? {},
             params: req.params ?? {},
             body: req.body ?? {},
+            headers: req.headers ?? {},
           }
           const response = await execute(input)
           res.status(200).json(response)

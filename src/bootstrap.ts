@@ -1,6 +1,5 @@
 import { IDependencies } from '@/core/shared/types'
 import { Database } from '@/adapters/mongoose'
-import { Server } from '@/adapters/express'
 import { Cache } from '@/adapters/redis'
 import { IRepositoriesOpts } from '@/ports/database'
 
@@ -13,7 +12,7 @@ export const Dependencies: IDependencies = {
   Cache,
 }
 
-export {
-  Database,
-  Server,
+export const bootstrap = async () => {
+  await Dependencies.Cache.connect()
+  await Database.connect()
 }
