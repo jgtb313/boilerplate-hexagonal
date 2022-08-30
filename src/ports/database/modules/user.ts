@@ -3,7 +3,7 @@ import { UserEntity } from '@/core/user/entities'
 
 import { PaginateOutput } from '../support'
 
-export type FindInput = Partial<Pick<UserEntity, 'name' | 'email' | 'status'>>
+export type FindInput = Partial<Pick<UserEntity, 'name'>>
 export type PaginateInput = PaginationInput & FindInput
 
 export type IUserRepository = {

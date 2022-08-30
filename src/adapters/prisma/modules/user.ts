@@ -47,7 +47,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
     ])
 
     return {
-      docs,
+      docs: docs.map(user => User(user).state),
       page,
       limit,
       total,
@@ -78,9 +78,11 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
   async create (data: UserEntity): Promise<UserEntity> {
     const model = await prisma.user.create({ data: castToUserPrisma(data) })
 
-    await Cache.set(model.id, model)
+    const user = User(model).state
 
-    return User(model).state
+    await Cache.set(model.id, user)
+
+    return user
   },
 
   async updateById (id: string, data: Partial<UserEntity>): Promise<UserEntity> {
@@ -92,14 +94,13 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
   async deleteById (id: string): Promise<void> {
     const model = await this.findById(id)
 
-    await prisma.user.delete({ where: { id: model.id as string } })
+    await prisma.user.delete({ where: { id: model.id } })
   },
 })
 
 const castToUserPrisma = (data: UserEntity): UserPrisma => {
   return {
     ...data,
-    id: data.id as string,
     deletedAt: data.deletedAt ?? null,
     createdAt: data.createdAt as Date,
     updatedAt: data.updatedAt as Date,

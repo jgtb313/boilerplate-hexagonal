@@ -12,7 +12,6 @@ export type UserStatusEnum = z.infer<typeof UserStatus>
 
 const ID = z
   .string()
-  .nullish()
 
 const Name = z
   .string()
@@ -43,10 +42,10 @@ export const UserSchema = z.object({
 })
 export type UserEntity = z.infer<typeof UserSchema>
 
-export const User = (user: UserEntity) => ({
+export const User = (user: Omit<UserEntity, 'id'>) => ({
   state: Object.freeze(
-    withID(
-      UserSchema.parse(user),
+    UserSchema.parse(
+      withID(user),
     ),
   ),
 

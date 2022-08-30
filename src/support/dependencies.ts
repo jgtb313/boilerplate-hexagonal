@@ -1,6 +1,6 @@
 import { IDependencies } from '@/core/shared/types'
-import { Database } from '@/adapters/prisma'
-import { Server } from '@/adapters/fastify'
+import { Database } from '@/adapters/mongoose'
+import { Server } from '@/adapters/express'
 import { Cache } from '@/adapters/redis'
 import { IRepositoriesOpts } from '@/ports/database'
 

@@ -25,7 +25,7 @@ export const UserHttp = (dependencies: IDependencies): IUserRouter => ({
   list: {
     path: '/users',
     method: 'GET',
-    execute: async ({ query }: IRouteInput<ListUserInput, {}, {}>) => {
+    execute: async ({ query }: IRouteInput<ListUserInput, {}, {}, {}>) => {
       const data = await listUser(dependencies)(query)
       return withResponse(data)
     },
@@ -34,34 +34,35 @@ export const UserHttp = (dependencies: IDependencies): IUserRouter => ({
   paginate: {
     path: '/users/paginate',
     method: 'GET',
-    execute: async ({ query }: IRouteInput<PaginateUserInput, {}, {}>) => {
+    execute: async ({ query }: IRouteInput<PaginateUserInput, {}, {}, {}>) => {
       const data = await paginateUser(dependencies)(query)
       return withPaginateResponse(data)
-    },
-  },
-
-  details: {
-    path: '/users/:id',
-    method: 'GET',
-    execute: async ({ params }: IRouteInput<{}, DetailsUserInput, {}>) => {
-      const data = await detailsUser(dependencies)(params)
-      return withResponse(data)
     },
   },
 
   emailExists: {
     path: '/users/email-exists',
     method: 'GET',
-    execute: async ({ query }: IRouteInput<EmailExistsInput, {}, {}>) => {
-      const valid = await emailExists(dependencies)(query)
-      return withResponse({ valid })
+    execute: async ({ query }: IRouteInput<EmailExistsInput, {}, {}, {}>) => {
+      console.log(query)
+      const exists = await emailExists(dependencies)(query)
+      return withResponse({ exists })
+    },
+  },
+
+  details: {
+    path: '/users/:id',
+    method: 'GET',
+    execute: async ({ params }: IRouteInput<{}, DetailsUserInput, {}, {}>) => {
+      const data = await detailsUser(dependencies)(params)
+      return withResponse(data)
     },
   },
 
   create: {
     path: '/users',
     method: 'POST',
-    execute: async ({ body }: IRouteInput<{}, {}, CreateUserInput>) => {
+    execute: async ({ body }: IRouteInput<{}, {}, CreateUserInput, {}>) => {
       const { id } = await createUser(dependencies)(body)
       return withResponse({
         message: 'userCreatedSuccessful',
@@ -74,8 +75,8 @@ export const UserHttp = (dependencies: IDependencies): IUserRouter => ({
 
   update: {
     path: '/users/:id',
-    method: 'PUT',
-    execute: async ({ params, body }: IRouteInput<{}, Pick<UpdateUserInput, 'id'>, Omit<UpdateUserInput, 'id'>>) => {
+    method: 'PATCH',
+    execute: async ({ params, body }: IRouteInput<{}, Pick<UpdateUserInput, 'id'>, Omit<UpdateUserInput, 'id'>, {}>) => {
       const data = await updateUser(dependencies)({ ...params, ...body })
       return withResponse(data)
     },
@@ -84,7 +85,7 @@ export const UserHttp = (dependencies: IDependencies): IUserRouter => ({
   delete: {
     path: '/users/:id/delete',
     method: 'PATCH',
-    execute: async ({ params }: IRouteInput<{}, DeleteUserInput, {}>) => {
+    execute: async ({ params }: IRouteInput<{}, DeleteUserInput, {}, {}>) => {
       await deleteUser(dependencies)(params)
       return withResponse({
         message: 'userDeletedSuccessful',
@@ -95,7 +96,7 @@ export const UserHttp = (dependencies: IDependencies): IUserRouter => ({
   destroy: {
     path: '/users/:id',
     method: 'DELETE',
-    execute: async ({ params }: IRouteInput<{}, DestroyUserInput, {}>) => {
+    execute: async ({ params }: IRouteInput<{}, DestroyUserInput, {}, {}>) => {
       await destroyUser(dependencies)(params)
       return withResponse({
         message: 'userDestroyedSuccessful',

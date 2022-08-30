@@ -12,8 +12,8 @@ export const setupRoutes = (routes: IModuleRoute) => {
         handler: async (req, reply) => {
           try {
             const input = {
-              query: req.query,
-              params: req.params,
+              query: req.query ?? {},
+              params: req.params ?? {},
               body: req.body ?? {},
             }
             const response = await execute(input)

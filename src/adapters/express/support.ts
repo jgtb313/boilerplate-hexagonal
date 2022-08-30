@@ -12,9 +12,9 @@ export const setupRoutes = (router: Router) => (routes: IModuleRoute) => {
       router[method.toLowerCase() as HTTPMethods](path, async (req: Request, res: Response) => {
         try {
           const input = {
-            query: req.query,
-            params: req.params,
-            body: req.body,
+            query: req.query ?? {},
+            params: req.params ?? {},
+            body: req.body ?? {},
           }
           const response = await execute(input)
           res.status(200).json(response)

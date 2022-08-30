@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { pipe } from 'lodash/fp'
 
+import { pipe } from '@/support/utilities'
 import { ValidationError } from '@/support/errors'
 import { IDependencies } from '@/core/shared/types'
 import { User, UserSchema } from '@/core/user/entities'
@@ -12,7 +12,7 @@ export const DeleteUser = UserSchema
 export type DeleteUserInput = z.infer<typeof DeleteUser>
 
 const execute = ({ Repositories }: IDependencies) => async ({ id }: DeleteUserInput) => {
-  const model = await Repositories.user.findById(id as string)
+  const model = await Repositories.user.findById(id)
 
   const user = User(model)
 

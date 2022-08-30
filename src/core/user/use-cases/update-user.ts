@@ -13,7 +13,7 @@ export const UpdateUser = UserSchema
 export type UpdateUserInput = z.infer<typeof UpdateUser>
 
 const execute = ({ Repositories }: IDependencies) => async ({ id, name }: UpdateUserInput) => {
-  const model = await Repositories.user.findById(id as string)
+  const model = await Repositories.user.findById(id)
 
   const user = User(model)
 

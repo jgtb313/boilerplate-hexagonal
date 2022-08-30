@@ -49,10 +49,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
 
     const data = await Model.find(where)
 
-    return data.map(model => User({
-      ...model.toObject(),
-      id: model._id.toString(),
-    }).state)
+    return data.map(model => User(castToUserEntity(model)).state)
   },
 
   async paginate ({ page, limit, ...params }: PaginateInput): Promise<PaginateOutput<UserEntity>> {
@@ -64,10 +61,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
 
     const { docs: data, totalDocs } = await Model.paginate(where, { page, limit })
 
-    const docs = data.map(model => User({
-      ...model.toObject(),
-      id: model._id.toString(),
-    }).state)
+    const docs = data.map(model => User(castToUserEntity(model)).state)
 
     return {
       docs,
@@ -90,10 +84,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
       throw new NotFoundError('userNotFound')
     }
 
-    return User({
-      ...model.toObject(),
-      id: model._id.toString(),
-    }).state
+    return User(castToUserEntity(model)).state
   },
 
   async emailExists (email: string): Promise<boolean> {
@@ -104,12 +95,11 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
   async create (data: UserEntity): Promise<UserEntity> {
     const model = await new Model(data).save()
 
-    await Cache.set(model.id, model)
+    const user = User(castToUserEntity(model)).state
 
-    return User({
-      ...model.toObject(),
-      id: model._id.toString(),
-    }).state
+    await Cache.set(model.id, user)
+
+    return user
   },
 
   async updateById (id: string, data: Partial<UserEntity>): Promise<UserEntity> {
@@ -119,10 +109,7 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
       throw new NotFoundError('userNotFound')
     }
 
-    return User({
-      ...model.toObject(),
-      id: model._id.toString(),
-    }).state
+    return User(castToUserEntity(model)).state
   },
 
   async deleteById (id: string): Promise<void> {
@@ -131,3 +118,10 @@ export const user = ({ Cache }: IRepositoriesOpts): IUserRepository => ({
     await Model.findByIdAndDelete(model.id)
   },
 })
+
+const castToUserEntity = (model: UserDocument): UserEntity => {
+  return {
+    ...model.toObject(),
+    id: model._id.toString(),
+  }
+}

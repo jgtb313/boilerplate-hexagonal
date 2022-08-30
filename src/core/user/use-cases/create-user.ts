@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { pipe } from 'lodash/fp'
 
+import { pipe } from '@/support/utilities'
 import { ValidationError } from '@/support/errors'
 import { IDependencies } from '@/core/shared/types'
 import { User, UserSchema } from '@/core/user/entities'
