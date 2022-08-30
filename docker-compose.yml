@@ -1,0 +1,64 @@
+version: "3"
+
+services:
+  mongo-primary:
+    container_name: mongo-primary
+    restart: always
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "app"]
+    image: mongo:latest
+    volumes:
+      - boilerplate-mongo-primary-data:/data/db
+      - ./rs-init.sh:/scripts/rs-init.sh
+    ports:
+      - 27021:27017
+
+  mongo-secondary:
+    container_name: mongo-secondary
+    restart: always
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "app"]
+    image: mongo:latest
+    volumes:
+      - boilerplate-mongo-secondary-data:/data
+    ports:
+      - 27022:27017
+
+  mongo-tertiary:
+    container_name: mongo-tertiary
+    restart: always
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "app"]
+    image: mongo:latest
+    volumes:
+      - boilerplate-mongo-tertiary-data:/data
+    ports:
+      - 27023:27017
+
+  postgres:
+    container_name: "postgres"
+    image: "postgres:13-alpine"
+    restart: "always"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - .env
+    volumes:
+      - boilerplate-postgres-data:/var/lib/postgresql/data
+      - ./src/config/docker/postgres/init-database.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - ${POSTGRES_PORT}:5432
+
+  redis:
+    container_name: redis
+    image: redis
+    command: redis-server
+    ports:
+      - "6379:6379"
+    volumes:
+      - boilerplate-redis-data:/data
+
+volumes:
+  boilerplate-mongo-primary-data:
+  boilerplate-mongo-secondary-data:
+  boilerplate-mongo-tertiary-data:
+  boilerplate-postgres-data:
+  boilerplate-redis-data:
